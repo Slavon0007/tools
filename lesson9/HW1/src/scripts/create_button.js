@@ -1,5 +1,6 @@
-import { onClickOnPlaceInField } from './event_on_click.js.js';
-import { onClickValidate, onMakeObjectFromValuesInForm } from './validate.js.js';
+import { onClickOnPlaceInField } from './event_on_click';
+import { onClickValidate, onMakeObjectFromValuesInForm } from './validate';
+
 const createButton = document.querySelector('.nav__button');
 const popupBlock = document.querySelector('.popup-layer');
 const fieldOfDays = document.querySelector('.main__sidebar_days');
@@ -18,8 +19,7 @@ export const onCreateButton = () => {
     popupBlock.style.display = 'block';
 
     const myDate = document.querySelectorAll('.specialDate');
-    [...myDate].forEach(elem =>
-        elem.value = new Date().toISOString().substr(0, 10));
+    [...myDate].forEach(elem => elem.value = new Date().toISOString().substr(0, 10)); //eslint-disable-line
 
     const headerInput = document.querySelector('.event__name');
     headerInput.value = '';
@@ -32,7 +32,7 @@ export const onCreateButton = () => {
 
     fieldOfDays.removeEventListener('click', onClickOnPlaceInField);
 
-    let tempObj = onMakeObjectFromValuesInForm();
+    const tempObj = onMakeObjectFromValuesInForm();
     onClickValidate(tempObj);
 };
 createButton.addEventListener('click', onCreateButton);

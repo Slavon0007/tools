@@ -1,14 +1,13 @@
-import { setItem, getItem } from './storage.js.js';
-import { onCheckLateEffortOfDeleteOrEdite } from './validate.js.js';
-import { getEventList, createEvent, updatEvent, deleteEvent } from './eventsGateway.js.js';
+import { onCheckLateEffortOfDeleteOrEdite } from './validate';
+import { getEventList } from './eventsGateway';
 
 
 const fieldOfDays = document.querySelector('.main__sidebar_days');
 const popupBlock = document.querySelector('.popup-layer');
 const iconDelete = document.querySelector('.event__btn-delete');
 
-export let markOnFactOfEdit = 0;
-export let dataId = '';
+export let markOnFactOfEdit = 0; //eslint-disable-line
+export let dataId = ''; //eslint-disable-line
 
 export const funcForMakeMarkValuableNull = () => {
     markOnFactOfEdit = 0;
@@ -18,7 +17,7 @@ export const funcForMakeDataIdEmpty = () => {
     dataId = '';
 };
 
-export const funcForEditEvent = event => {
+export const funcForEditEvent = (event) => {
     const blockOfEvent = event.target;
     if (!blockOfEvent.classList.contains('main__sidebar_day_object')) return;
 
@@ -27,17 +26,17 @@ export const funcForEditEvent = event => {
 
     dataId = blockOfEvent.dataset.id;
     getEventList()
-        .then(array => {
+        .then((array) => {
             const arr = [];
-            array.forEach(elem => {
+            array.forEach((elem) => {
                 elem.startTime = new Date(elem.startTime);
                 elem.endTime = new Date(elem.endTime);
                 arr.push(elem);
             });
             return arr;
         })
-        .then(eventsArray => {
-            const currentObject = eventsArray.find(elem => elem.id === dataId);
+        .then((eventsArray) => {
+            const currentObject = eventsArray.find((elem) => elem.id === dataId);
 
             const title = document.querySelector('.event__name');
             currentObject.header !== null ?
@@ -51,15 +50,15 @@ export const funcForEditEvent = event => {
 
             const startDateInput = document.querySelector('.event__date-start');
             const startYear = currentObject.startTime.getFullYear();
-            let startMonth = currentObject.startTime.getMonth();
-            let startDate = currentObject.startTime.getDate();
+            const startMonth = currentObject.startTime.getMonth();
+            const startDate = currentObject.startTime.getDate();
             const startDateObject = new Date(Date.UTC(startYear, startMonth, startDate));
             startDateInput.value = new Date(startDateObject).toISOString().substr(0, 10);
 
             const endDateInput = document.querySelector('.event__date-end');
             const endYear = currentObject.endTime.getFullYear();
-            let endMonth = currentObject.endTime.getMonth();
-            let endDate = currentObject.endTime.getDate();
+            const endMonth = currentObject.endTime.getMonth();
+            const endDate = currentObject.endTime.getDate();
             const endDateObject = new Date(Date.UTC(endYear, endMonth, endDate));
             endDateInput.value = new Date(endDateObject).toISOString().substr(0, 10);
 

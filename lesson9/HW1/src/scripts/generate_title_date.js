@@ -1,16 +1,15 @@
-import { arrDaysOfWeek } from './current_week.js';
-
+import { arrDaysOfWeek } from './current_week';
 
 
 export const renderTitleDate = (startdate, enddate) => {
     const placeForDateTitle = document.querySelector('.nav__dateMonEar-today');
-    let firstDayOfWeek = new Date(startdate);
-    let firstDayMonth = firstDayOfWeek.toDateString().split(' ')[1];
-    let firstDayYear = firstDayOfWeek.getFullYear();
+    const firstDayOfWeek = new Date(startdate);
+    const firstDayMonth = firstDayOfWeek.toDateString().split(' ')[1];
+    const firstDayYear = firstDayOfWeek.getFullYear();
 
-    let lastDayOfWeek = new Date(enddate);
-    let lastDayMonth = lastDayOfWeek.toDateString().split(' ')[1];
-    let lastDayYear = lastDayOfWeek.getFullYear();
+    const lastDayOfWeek = new Date(enddate);
+    const lastDayMonth = lastDayOfWeek.toDateString().split(' ')[1];
+    const lastDayYear = lastDayOfWeek.getFullYear();
 
     if (firstDayMonth === lastDayMonth && firstDayYear === lastDayYear) {
         placeForDateTitle.innerHTML = `${firstDayMonth} ${firstDayYear}`;

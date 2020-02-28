@@ -1,16 +1,16 @@
-import { arrDaysOfWeek } from './current_week.js.js';
-import { onClickValidate, onMakeObjectFromValuesInForm } from './validate.js.js';
+import { arrDaysOfWeek } from './current_week';
+import { onClickValidate, onMakeObjectFromValuesInForm } from './validate';
 
 const fieldOfDays = document.querySelector('.main__sidebar_days');
 const popupBlock = document.querySelector('.popup-layer');
 const saveBtn = document.querySelector('.event__btn-save');
 
-export const onClickOnPlaceInField = event => {
+export const onClickOnPlaceInField = (event) => {
     const clickedHour = event.target;
     if (!clickedHour.classList.contains('main__sidebar_days_hours')) return;
 
     const hourNumber = +clickedHour.dataset.hourNumber;
-    const dayNumber = clickedHour.closest('.main__sidebar_days_line').dataset.dayNumber;
+    const { dayNumber } = clickedHour.closest('.main__sidebar_days_line').dataset;
     const currentYear = arrDaysOfWeek[dayNumber].getFullYear();
     const currentMonth = arrDaysOfWeek[dayNumber].getMonth();
     const currentDate = arrDaysOfWeek[dayNumber].getDate();
@@ -20,7 +20,7 @@ export const onClickOnPlaceInField = event => {
     saveBtn.style.display = 'block';
 
     const myDate = document.querySelectorAll('.specialDate');
-    [...myDate].forEach(elem => elem.value = new Date(startTime)
+    [...myDate].forEach((elem) => elem.value = new Date(startTime)
         .toISOString().substr(0, 10));
 
     const startHour = new Date(currentYear, currentMonth, currentDate, hourNumber).getHours();
@@ -38,7 +38,7 @@ export const onClickOnPlaceInField = event => {
     if (startHour === 23) {
         [...myDate][1].value = new Date(startTime.setDate(startTime.getDate() + 1))
             .toISOString().substr(0, 10);
-        endTimePlace.value = [`00`, '00'].join(':');
+        endTimePlace.value = ['00', '00'].join(':');
     }
 
     const headerInput = document.querySelector('.event__name');
@@ -52,7 +52,7 @@ export const onClickOnPlaceInField = event => {
 
     fieldOfDays.removeEventListener('click', onClickOnPlaceInField);
 
-    let tempObj = onMakeObjectFromValuesInForm();
+    const tempObj = onMakeObjectFromValuesInForm();
     onClickValidate(tempObj);
 };
 fieldOfDays.addEventListener('click', onClickOnPlaceInField);

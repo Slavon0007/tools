@@ -1,11 +1,11 @@
-import { setItem, getItem } from './storage.js.js';
-import { funcForDeleteEvene } from './delete_event.js.js';
-import { dataId, markOnFactOfEdit } from './edit_event.js.js';
+import { getItem } from './storage';
+import { funcForDeleteEvene } from './delete_event';
+import { dataId } from './edit_event';
 
 
-let validateMessageElem = document.querySelector('.message_validation');
+const validateMessageElem = document.querySelector('.message_validation');
 const deleteBasket = document.querySelector('.event__btn-delete');
-export let markOnValidateText = 0;
+export let markOnValidateText = 0; //eslint-disable-line
 
 export const onMakeMarkOnValidateTextNull = () => {
     markOnValidateText = 0;
@@ -15,18 +15,19 @@ export const onClearValidateMessages = () => validateMessageElem.innerHTML = '';
 
 
 const onCheckIntersectionEvents = (object) => {
-    let errorText = undefined;
-    let eventsArray = getItem('eventsArray') || [];
-    eventsArray.map(elem => {
+    let errorText;
+    const eventsArray = getItem('eventsArray') || [];
+    eventsArray.map((elem) => {
         elem.startTime = new Date(elem.startTime);
         elem.endTime = new Date(elem.endTime);
+        return elem;
     });
-    let currentStartTime = object.startTime.getTime();
-    let currentEndTime = object.endTime.getTime();
-    for (let i = 0; i < eventsArray.length; i++) {
+    const currentStartTime = object.startTime.getTime();
+    const currentEndTime = object.endTime.getTime();
+    for (let i = 0; i < eventsArray.length; i += 1) {
         if (eventsArray[i].id === object.id) continue;
-        let elemStartTime = eventsArray[i].startTime.getTime();
-        let elemEndTime = eventsArray[i].endTime.getTime();
+        const elemStartTime = eventsArray[i].startTime.getTime();
+        const elemEndTime = eventsArray[i].endTime.getTime();
         if ((currentStartTime < elemEndTime &&
                 currentStartTime < elemEndTime) &&
             (currentEndTime > elemStartTime &&
@@ -34,28 +35,25 @@ const onCheckIntersectionEvents = (object) => {
         ) {
             errorText = 'Error! Event can`t intersect';
         }
-    };
+    }
     return errorText;
 };
 
 
-const onCheckCorrectDates = (object) =>
-    object.endTime < object.startTime ?
+const onCheckCorrectDates = (object) => (object.endTime < object.startTime ?
     'Error! End date can`t be ealier than start date' :
-    undefined;
+    undefined);
 
 
-const onCheckEventLength = (object) =>
-    21600000 <= object.endTime - object.startTime ?
+const onCheckEventLength = (object) => (object.endTime - object.startTime >= 21600000 ?
     'Error! Event can`t be more than 6 hours' :
-    undefined;
+    undefined);
 
 
-const onCheckMinutes = (object) =>
-    (object.startTime.getMinutes() !== 0 && object.startTime.getMinutes() % 15 !== 0) ||
+const onCheckMinutes = (object) => ((object.startTime.getMinutes() !== 0 && object.startTime.getMinutes() % 15 !== 0) ||
     (object.endTime.getMinutes() !== 0 && object.endTime.getMinutes() % 15 !== 0) ?
     'Error! Minuts must be a multiple of fifteen' :
-    undefined;
+    undefined);
 
 
 export const onMakeObjectFromValuesInForm = () => {
@@ -63,18 +61,18 @@ export const onMakeObjectFromValuesInForm = () => {
     const tempObj = [...new FormData(form)]
         .reduce((acc, [field, value]) => ({...acc, [field]: value }), {});
 
-    const startDate_hours = tempObj.startTimePlace.split(':')[0];
-    const startDate_min = tempObj.startTimePlace.split(':')[1];
+    const startDateHours = tempObj.startTimePlace.split(':')[0];
+    const startDateMin = tempObj.startTimePlace.split(':')[1];
     tempObj.startTime = [...tempObj.startTime.split('-')];
-    tempObj.startTime[1] = tempObj.startTime[1] - 1;
-    tempObj.startTime.push(startDate_hours, startDate_min);
+    tempObj.startTime[1] -= 1;
+    tempObj.startTime.push(startDateHours, startDateMin);
     tempObj.startTime = new Date(...tempObj.startTime);
 
-    const endDate_hours = tempObj.endTimePlace.split(':')[0];
-    const endDate_min = tempObj.endTimePlace.split(':')[1];
+    const endDateHours = tempObj.endTimePlace.split(':')[0];
+    const endDateMin = tempObj.endTimePlace.split(':')[1];
     tempObj.endTime = [...tempObj.endTime.split('-')];
-    tempObj.endTime[1] = tempObj.endTime[1] - 1;
-    tempObj.endTime.push(endDate_hours, endDate_min);
+    tempObj.endTime[1] -= 1;
+    tempObj.endTime.push(endDateHours, endDateMin);
     tempObj.endTime = new Date(...tempObj.endTime);
 
     tempObj.id = dataId || '';
@@ -87,12 +85,12 @@ const form = document.querySelector('.popup');
 const arrOfValidateFuncs = [onCheckMinutes, onCheckEventLength,
     onCheckCorrectDates, onCheckIntersectionEvents
 ];
-export const onInputValidate = event => {
+export const onInputValidate = (event) => {
     if (!event.target.classList.contains('input')) return;
     const tempObj = onMakeObjectFromValuesInForm();
     const errorText = arrOfValidateFuncs
-        .map(func => func(tempObj))
-        .filter(erroText => erroText)
+        .map((func) => func(tempObj))
+        .filter((erroText) => erroText)
         .join(' ');
     validateMessageElem.textContent = errorText;
     if (validateMessageElem.textContent !== '') {
@@ -102,9 +100,6 @@ export const onInputValidate = event => {
     }
 };
 form.addEventListener('input', onInputValidate);
-
-
-
 
 
 export const onCheckLateEffortOfDeleteOrEdite = (object) => {
@@ -117,14 +112,14 @@ export const onCheckLateEffortOfDeleteOrEdite = (object) => {
         validateMessageElem.innerHTML = '';
         markOnValidateText = 0;
         deleteBasket.addEventListener('click', funcForDeleteEvene);
-    };
+    }
 };
 
 
-export const onClickValidate = object => {
+export const onClickValidate = (object) => {
     const errorText = arrOfValidateFuncs
-        .map(func => func(object))
-        .filter(erroText => erroText)
+        .map((func) => func(object))
+        .filter((erroText) => erroText)
         .join(' ');
     validateMessageElem.textContent = errorText;
     if (validateMessageElem.textContent !== '') {

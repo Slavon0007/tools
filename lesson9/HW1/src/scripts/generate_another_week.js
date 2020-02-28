@@ -1,16 +1,17 @@
-import { arrDaysOfWeek } from './current_week.js';
-import { generateArrDaysOfWeek } from './current_week.js';
-import { renderCurrentWeek } from './current_week.js';
-import { renderTitleDate } from './generate_title_date.js';
-import { renderEventObject } from './generate_event_object.js';
-import { renderRedLIne, intervalFunc } from './redline.js';
-import { timerId } from './redline.js';
+import {
+    arrDaysOfWeek,
+    generateArrDaysOfWeek,
+    renderCurrentWeek,
+} from './current_week';
+import { renderTitleDate } from './generate_title_date';
+import { renderEventObject } from './generate_event_object';
+import { renderRedLIne, intervalFunc, timerId } from './redline';
 
 
 const numbersOfDates = document.querySelectorAll('.header__week-block_daydate');
-export let counter = 0;
+export let counter = 0; //eslint-disable-line
 
-export const renderAnotherWeek = event => {
+export const renderAnotherWeek = (event) => {
     const certainArrow = event.target;
     const checkArrow = certainArrow.classList.contains('nav__arow_left') ||
         certainArrow.classList.contains('nav__arow_right');
@@ -18,18 +19,18 @@ export const renderAnotherWeek = event => {
 
     if (certainArrow.classList.contains('nav__arow_right')) {
         arrDaysOfWeek
-            .forEach(element => element.setDate(element.getDate() + 7));
-        counter++;
+            .forEach((element) => element.setDate(element.getDate() + 7));
+        counter += 1;
     }
     if (certainArrow.classList.contains('nav__arow_left')) {
         arrDaysOfWeek
-            .forEach(element => element.setDate(element.getDate() - 7));
-        counter--;
+            .forEach((element) => element.setDate(element.getDate() - 7));
+        counter -= 1;
     }
-    let temp = new Date(arrDaysOfWeek[0]);
+    const temp = new Date(arrDaysOfWeek[0]);
     [...numbersOfDates]
-    .forEach(elem => {
-        let tempElem = elem.closest('.header__week-block_days');
+    .forEach((elem) => {
+        const tempElem = elem.closest('.header__week-block_days');
         tempElem.classList.remove('today__header__week-block_days');
         elem.innerHTML = temp.getDate();
         temp.setDate(temp.getDate() + 1);
